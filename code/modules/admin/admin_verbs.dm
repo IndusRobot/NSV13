@@ -11,7 +11,7 @@ GLOBAL_PROTECT(admin_verbs_default)
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
 	/client/proc/dsay,					/*talk in deadchat using our ckey/fakekey*/
 	/client/proc/investigate_show,		/*various admintools for investigation. Such as a singulo grief-log*/
-	/client/proc/secrets,
+	/client/proc/secrets,				/*from useful quick commands, to memes*/
 	/client/proc/toggle_hear_radio,		/*allows admins to hide all radio output*/
 	/client/proc/reload_admins,
 	/client/proc/reestablish_db_connection, /*reattempt a connection to the database*/
@@ -31,6 +31,7 @@ GLOBAL_PROTECT(admin_verbs_admin)
 	/client/proc/game_panel,			/*game panel, allows to change game-mode etc*/
 	/client/proc/check_ai_laws,			/*shows AI and borg laws*/
 	/datum/admins/proc/toggleooc,		/*toggles ooc on/off for everyone*/
+	/datum/admins/proc/togglelooc,		/*toggles looc on/off for everyone*/ //nsv13
 	/datum/admins/proc/toggleoocdead,	/*toggles ooc on/off for everyone who is dead*/
 	/datum/admins/proc/toggleenter,		/*toggles whether people can join the current game*/
 	/datum/admins/proc/toggleguests,	/*toggles whether guests can join the current game*/
@@ -79,7 +80,8 @@ GLOBAL_PROTECT(admin_verbs_admin)
 	/client/proc/stabilize_atmos,
 	/client/proc/openTicketManager,
 	/client/proc/changeranks, //NSV13 - verb to change rank structure
-	/client/proc/system_manager //Nsv13 - Fleet + starsystem management
+	/client/proc/system_manager, //Nsv13 - Fleet + starsystem management
+	/client/proc/instance_overmap_menu //Nsv13 - Midround ship creation.
 	)
 GLOBAL_LIST_INIT(admin_verbs_ban, list(/client/proc/unban_panel, /client/proc/ban_panel, /client/proc/stickybanpanel))
 GLOBAL_PROTECT(admin_verbs_ban)
@@ -441,7 +443,7 @@ GLOBAL_PROTECT(admin_verbs_hideable)
 	set name = "Secrets"
 	set category = "Adminbus"
 	if (holder)
-		holder.Secrets()
+		GLOB.admin_secrets.ui_interact(usr)
 	SSblackbox.record_feedback("tally", "admin_verb", 1, "Secrets Panel") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/poll_panel()
@@ -483,7 +485,7 @@ GLOBAL_PROTECT(admin_verbs_hideable)
 				mob.name = initial(mob.name)
 				mob.mouse_opacity = initial(mob.mouse_opacity)
 		else
-			var/new_key = ckeyEx(stripped_input(usr, "Enter your desired display name.", "Fake Key", key, 26))
+			var/new_key = ckeyEx(stripped_input(usr, "Enter your desired display name.", "Fake Key", key, max_length=26))
 			if(!new_key)
 				return
 			holder.fakekey = new_key
@@ -642,7 +644,7 @@ GLOBAL_PROTECT(admin_verbs_hideable)
 	set category = "Adminbus"
 	set name = "OSay"
 	set desc = "Makes an object say something."
-	var/message = input(usr, "What do you want the message to be?", "Make Sound") as text | null
+	var/message = capped_input(usr, "What do you want the message to be?", "Make Sound")
 	if(!message)
 		return
 	O.say(message)

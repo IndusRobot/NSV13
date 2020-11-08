@@ -37,7 +37,7 @@
 	var/datum/point/vector/trajectory
 	var/trajectory_ignore_forcemove = FALSE	//instructs forceMove to NOT reset our trajectory to the new location!
 
-	var/speed = 0.8			//Amount of deciseconds it takes for projectile to travel
+	var/speed = 0.7		//Amount of deciseconds it takes for projectile to travel
 	var/Angle = 0
 	var/original_angle = 0		//Angle at firing
 	var/nondirectional_sprite = FALSE //Set TRUE to prevent projectiles from having their sprites rotated based on firing angle
@@ -231,6 +231,11 @@
 	beam_segments[beam_index] = null
 
 /obj/item/projectile/Bump(atom/A)
+	if(!check_faction(A))
+		return FALSE 	 //Nsv13 - faction checking for overmaps. We're gonna just cut off real early and save some math if the IFF doesn't check out.
+	if(!trajectory)
+		var/turf/starting = get_turf(src)
+		trajectory = new(starting.x, starting.y, starting.z, pixel_x, pixel_y, Angle, SSprojectiles.global_pixel_speed)
 	var/datum/point/pcache = trajectory.copy_to()
 	var/turf/T = get_turf(A)
 	if(check_ricochet(A) && check_ricochet_flag(A) && ricochets < ricochets_max)
@@ -385,8 +390,6 @@
 			required_moves = SSprojectiles.global_max_tick_moves
 			time_offset += overrun * speed
 		time_offset += MODULUS(elapsed_time_deciseconds, speed)
-	if(collider2d) //Nsv13 change.
-		check_overmap_collisions()
 
 	for(var/i in 1 to required_moves)
 		pixel_move(1, FALSE)
@@ -402,7 +405,7 @@
 			direct_target.bullet_act(src, def_zone)
 			qdel(src)
 			return
-	if(isnum(angle))
+	if(isnum_safe(angle))
 		setAngle(angle)
 	if(spread)
 		setAngle(Angle + ((rand() - 0.5) * spread))
@@ -535,6 +538,8 @@
 		pixel_x = trajectory.return_px() - trajectory.mpx * trajectory_multiplier * SSprojectiles.global_iterations_per_move
 		pixel_y = trajectory.return_py() - trajectory.mpy * trajectory_multiplier * SSprojectiles.global_iterations_per_move
 		animate(src, pixel_x = trajectory.return_px(), pixel_y = trajectory.return_py(), time = 1, flags = ANIMATION_END_NOW)
+	if(physics2d)
+		physics2d.update(x * 32 + pixel_x, y * 32 + pixel_y, Angle)
 	Range()
 
 /obj/item/projectile/proc/process_homing() //Nsv13 - Enhanced the performance of this entire proc.
@@ -660,8 +665,9 @@
 /obj/item/projectile/Destroy()
 	if(hitscan)
 		finalize_hitscan_and_generate_tracers()
-	if(collider2d) //Nsv13
-		qdel(collider2d)
+	if(physics2d) //Nsv13
+		physics2d.RemoveComponent()
+		qdel(physics2d)
 	STOP_PROCESSING(SSprojectiles, src)
 	cleanup_beam_segments()
 	qdel(trajectory)

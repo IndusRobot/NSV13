@@ -26,13 +26,17 @@
 	name = "Air Traffic Controller"
 	jobtype = /datum/job/air_traffic_controller
 
-	ears = /obj/item/radio/headset/headset_sec/alt/atc
+	ears = /obj/item/radio/headset/munitions/atc
 	uniform = /obj/item/clothing/under/ship/officer
 	suit = /obj/item/clothing/suit/hazardvest
 	head = /obj/item/clothing/head/beret/ship/pilot
 	gloves = /obj/item/clothing/gloves/color/brown
 	shoes = /obj/item/clothing/shoes/jackboots
 	r_pocket = /obj/item/flashlight/atc_wavy_sticks
+
+	backpack = /obj/item/storage/backpack/munitions
+	satchel = /obj/item/storage/backpack/satchel/munitions
+	duffelbag = /obj/item/storage/backpack/duffelbag/munitions
 
 /obj/effect/landmark/start/air_traffic_controller
 	name = "Air Traffic Controller"

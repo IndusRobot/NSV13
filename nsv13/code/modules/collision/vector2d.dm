@@ -20,6 +20,10 @@ Constructor for vector2d objects, taking a simple X,Y coordinate.
 	src.y = y
 	..()
 
+/datum/vector2d/Destroy(force, ...)
+	. = ..()
+	return QDEL_HINT_QUEUE
+
 /*
 Method to set our position directly
 */
@@ -146,7 +150,7 @@ Get the magnitude of a vector
 
 /*
 Get the angle of a vector
-@return the angle of the vector (atan)
+@return the angle of the vector (atan) in radians
 */
 /datum/vector2d/proc/angle()
 	return ATAN2(src.x, src.y)

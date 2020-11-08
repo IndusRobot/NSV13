@@ -180,6 +180,10 @@
 	name = "Deck 3 Frame 4 Central Maintenance"
 	icon_state = "maintcentral"
 
+/area/maintenance/nsv/bridge
+	name = "Fore Bridge Maintenance"
+	icon_state = "maint_bridge"
+
 /area/hallway/nsv/deck2/forward
 	name = "Deck 2 Forward Hallway"
 	icon_state = "hallF"
@@ -195,7 +199,6 @@
 /area/maintenance/nsv/mining_ship
 	has_gravity = TRUE
 	looping_ambience = 'nsv13/sound/ambience/maintenance.ogg'
-	noteleport = TRUE
 
 /area/maintenance/nsv/mining_ship/central
 	name = "Rocinante maintenance"
@@ -501,7 +504,6 @@
 /area/nostromo
 	name = "DMC Rocinante"
 	ambientsounds = list('nsv13/sound/ambience/leit_motif.ogg','nsv13/sound/ambience/wind.ogg','nsv13/sound/ambience/wind2.ogg','nsv13/sound/ambience/wind3.ogg','nsv13/sound/ambience/wind4.ogg','nsv13/sound/ambience/wind5.ogg','nsv13/sound/ambience/wind6.ogg')
-	noteleport = TRUE
 	icon_state = "mining"
 	has_gravity = TRUE
 
@@ -670,3 +672,9 @@
 /area/Exited(atom/movable/M)
 	SEND_SIGNAL(src, COMSIG_AREA_EXITED, M)
 	SEND_SIGNAL(M, COMSIG_EXIT_AREA, src) //The atom that exits the area
+
+/area/engine/engineering/reactor_core
+	name = "Nuclear Reactor Core"
+
+/area/engine/engineering/reactor_control
+	name = "Reactor Control Room"

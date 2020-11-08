@@ -132,7 +132,7 @@
 			hasInterface = TRUE;
 	componentsDone = check_finished();
 	if(componentsDone){
-		state ++;
+		state = 12;
 	}
 	return FALSE;
 
@@ -153,31 +153,31 @@
 		if(2)
 			to_chat(user, "<span class='notice'>You start to bolt together [src].</span>");
 			if(do_after(user, 5 SECONDS, target=src))
-				state ++
+				state = 3
 				update_icon()
 				return FALSE
 		if(4)
 			to_chat(user, "<span class='notice'>You start to bolt [src]'s housings together...</span>")
 			if(do_after(user, 5 SECONDS, target=src))
-				state ++
+				state = 5
 				update_icon()
 				return FALSE
 		if(6)
 			to_chat(user, "<span class='notice'>You start to bolt [src]'s connecting struts into its frame.</span>")
 			if(do_after(user, 5 SECONDS, target=src))
-				state ++
+				state = 7
 				update_icon()
 				return FALSE
 		if(8)
 			to_chat(user, "<span class='notice'>You start to bolt [src]'s primary generator coverings...</span>")
 			if(do_after(user, 5 SECONDS, target=src))
-				state ++
+				state = 9
 				update_icon()
 				return FALSE
 		if(10)
 			to_chat(user, "<span class='notice'>You start to secure [src]'s flux generator housing...</span>")
 			if(do_after(user, 5 SECONDS, target=src))
-				state ++
+				state = 11
 				update_icon()
 				return FALSE
 	anchored = !anchored
@@ -192,7 +192,7 @@
 		if(7)
 			to_chat(user, "<span class='notice'>You start to screw in [src]'s primary generator coverings...</span>");
 			if(do_after(user, 5 SECONDS, target=src)){
-				state ++;
+				state = 8;
 				update_icon();
 			}
 			return FALSE;
@@ -215,25 +215,25 @@
 		if(1)
 			to_chat(user, "<span class='notice'>You start to weld the chassis together...</span>");
 			if(do_after(user, 5 SECONDS, target=src)){
-				state ++;
+				state = 2;
 				update_icon();
 			}
 		if(3)
 			to_chat(user, "<span class='notice'>You start to weld [src]'s connecting struts into its frame.</span>");
 			if(do_after(user, 5 SECONDS, target=src)){
-				state ++;
+				state = 4;
 				update_icon();
 			}
 		if(5)
 			to_chat(user, "<span class='notice'>You start to weld [src]'s housings to the frame.</span>");
 			if(do_after(user, 5 SECONDS, target=src)){
-				state ++;
+				state = 6;
 				update_icon();
 			}
 		if(9)
 			to_chat(user, "<span class='notice'>You start to weld [src]'s primary generator coverings...</span>");
 			if(do_after(user, 5 SECONDS, target=src)){
-				state ++;
+				state = 10;
 				update_icon();
 				return FALSE;
 			}
@@ -315,6 +315,18 @@
 	. = ..();
 	var/obj/structure/overmap/ours = get_overmap();
 	ours?.shields = src;
+	if(!ours){
+		addtimer(CALLBACK(src, .proc/try_find_overmap), 20 SECONDS);
+	}
+}
+
+/obj/machinery/shield_generator/proc/try_find_overmap(){
+	var/obj/structure/overmap/ours = get_overmap();
+	ours?.shields = src;
+	if(!ours){
+		message_admins("WARNING: Shield generator in [get_area(src)] does not have a linked overmap!");
+		log_game("WARNING: Shield generator in [get_area(src)] does not have a linked overmap!");
+	}
 }
 
 /obj/machinery/shield_generator/proc/depower_shield(){
@@ -322,12 +334,25 @@
 	shield["max_integrity"] = 0;
 }
 
+/obj/machinery/shield_generator/proc/try_use_power(amount) // Although the machine may physically be powered, it may not have enough power to sustain a shield.
+	var/turf/T = get_turf(src)
+	var/obj/structure/cable/C = T.get_cable_node()
+	if(C)
+		if(!C.powernet)
+			return FALSE
+		var/power_in_net = C.powernet.avail-C.powernet.load
+
+		if(power_in_net && power_in_net > amount)
+			C.powernet.load += amount
+			return TRUE
+		return FALSE
+	return FALSE
+
 //Every tick, the shield generator updates its stats based on the amount of power it's being allowed to chug.
 /obj/machinery/shield_generator/process()
 {
-	idle_power_usage = power_input;
 	cut_overlays();
-	if(!powered() || idle_power_usage <= 0){
+	if(!powered() || power_input <= 0 || !try_use_power(power_input)){
 		depower_shield();
 		return FALSE;
 	}
@@ -376,6 +401,12 @@
 	data["powerAlloc"] = power_input/1e+6;
 	data["maxPower"] = max_power_input/1e+6;
 	data["active"] = active;
+	data["available_power"] = 0;
+	var/turf/T = get_turf(src)
+	var/obj/structure/cable/C = T.get_cable_node()
+	if(C)
+		if(C.powernet)
+			data["available_power"] = C.powernet.avail-C.powernet.load
 	return data;
 }
 

@@ -258,11 +258,12 @@
   */
 /mob/proc/attack_ui(slot)
 	var/obj/item/W = get_active_held_item()
-
 	if(istype(W))
+		//IF HELD TRY APPLY TO SLOT
 		if(equip_to_slot_if_possible(W, slot,0,0,0))
+			W.apply_outline()
 			return 1
-
+	//IF NO ITEM IS HELD, APPLY TO SLOT
 	if(!W)
 		// Activate the item
 		var/obj/item/I = get_item_by_slot(slot)
@@ -459,11 +460,13 @@
 	if(istype(A, /obj/effect/temp_visual/point))
 		return FALSE
 
-	var/tile = get_turf(A)
+	var/turf/tile = get_turf(A)
 	if (!tile)
 		return FALSE
 
-	new /obj/effect/temp_visual/point(A,invisibility)
+	var/turf/our_tile = get_turf(src)
+	var/obj/visual = new /obj/effect/temp_visual/point(our_tile, invisibility)
+	animate(visual, pixel_x = (tile.x - our_tile.x) * world.icon_size + A.pixel_x, pixel_y = (tile.y - our_tile.y) * world.icon_size + A.pixel_y, time = 1.7, easing = EASE_OUT)
 
 	return TRUE
 
