@@ -25,6 +25,9 @@ endmap
 map Vago
 endmap
 
+map spaceship
+endmap
+
 map hammerhead
 	voteweight 1.5
 
