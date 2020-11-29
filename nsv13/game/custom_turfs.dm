@@ -210,6 +210,12 @@
 	icon_state = "rwindow_spawner"
 	spawn_list = list(/obj/structure/grille, /obj/structure/window/reinforced/fulltile/ship/interior, /obj/machinery/door/firedoor/window, /obj/effect/landmark/zebra_interlock_point) //All windows should "batten down" on zebra.
 
+/obj/effect/spawner/structure/window/reinforced/classic
+    name = "Classic reinforced window spawner"
+    color = "#0000FF"
+    icon_state = "rwindow_spawner"
+    spawn_list = list(/obj/structure/grille, /obj/structure/window/reinforced/fulltile)
+
 /obj/structure/window/reinforced/ship
 	icon = 'nsv13/goonstation/icons/obj/window_pane.dmi'
 	icon_state = "rwindow"
