@@ -277,8 +277,7 @@
 /obj/machinery/atmospherics/components/trinary/filter{
 	dir = 4;
 	filter_type = "o2";
-	on = 1;
-	
+	on = 1
 	},
 /turf/open/floor/engine,
 /area/engine/engineering/pvp)
@@ -2033,6 +2032,9 @@
 /obj/effect/turf_decal/stripes/line{
 	dir = 8
 	},
+/obj/structure/cable/yellow{
+	icon_state = "1-2"
+	},
 /turf/open/floor/engine,
 /area/quartermaster/pvp)
 "eC" = (
@@ -2147,6 +2149,12 @@
 	},
 /turf/open/floor/monotile/dark,
 /area/quartermaster/pvp)
+"eO" = (
+/obj/machinery/atmospherics/pipe/manifold/scrubbers/visible{
+	dir = 4
+	},
+/turf/open/floor/engine,
+/area/engine/engineering/pvp)
 "eP" = (
 /obj/structure/closet/crate{
 	icon_state = "crateopen";
@@ -2789,6 +2797,9 @@
 /obj/structure/extinguisher_cabinet/east,
 /obj/effect/turf_decal/stripes/line{
 	dir = 8
+	},
+/obj/structure/cable/yellow{
+	icon_state = "1-2"
 	},
 /turf/open/floor/engine,
 /area/quartermaster/pvp)
@@ -3685,6 +3696,9 @@
 /obj/effect/turf_decal/stripes/line{
 	dir = 8
 	},
+/obj/structure/cable/yellow{
+	icon_state = "1-2"
+	},
 /turf/open/floor/engine,
 /area/quartermaster/pvp)
 "jc" = (
@@ -3735,7 +3749,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/open/floor/engine,
+/turf/open/floor/engine/air,
 /area/engine/engineering/pvp)
 "jf" = (
 /obj/machinery/atmospherics/pipe/heat_exchanging/manifold/layer1{
@@ -4014,8 +4028,7 @@
 "jT" = (
 /obj/structure/closet/wardrobe/robotics_black,
 /obj/machinery/camera/syndicate{
-	c_tag = "Robotics West";
-	network = list("SS13","RD")
+	c_tag = "Robotics West"
 	},
 /turf/open/floor/plasteel/white,
 /area/science/robotics/pvp)
@@ -4033,8 +4046,7 @@
 	icon_state = "rightsecure";
 	id = "astraeus_Holding_pen";
 	name = "Holding Pen";
-	req_one_access_txt = "150";
-	
+	req_one_access_txt = "150"
 	},
 /obj/machinery/door/firedoor/border_only/directional/north,
 /turf/open/floor/plasteel/dark,
@@ -4099,7 +4111,7 @@
 	},
 /obj/structure/window/reinforced,
 /obj/machinery/atmospherics/miner/toxins,
-/turf/open/floor/engine,
+/turf/open/floor/engine/plasma,
 /area/engine/engineering/pvp)
 "ke" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -4435,6 +4447,10 @@
 	},
 /obj/effect/turf_decal/stripes/line{
 	dir = 8
+	},
+/obj/structure/cable/yellow{
+	icon_state = "1-8";
+	tag = ""
 	},
 /turf/open/floor/engine,
 /area/quartermaster/pvp)
@@ -5106,7 +5122,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/open/floor/engine,
+/turf/open/floor/engine/n2o,
 /area/engine/engineering/pvp)
 "mu" = (
 /obj/structure/cable{
@@ -5674,7 +5690,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/open/floor/engine,
+/turf/open/floor/engine/n2,
 /area/engine/engineering/pvp)
 "nE" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on{
@@ -6469,8 +6485,7 @@
 "ps" = (
 /obj/machinery/camera/syndicate{
 	c_tag = "Research Access";
-	dir = 8;
-	network = list("SS13","RD")
+	dir = 8
 	},
 /turf/open/floor/plasteel/white,
 /area/science/pvp)
@@ -6752,7 +6767,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/open/floor/engine,
+/turf/open/floor/engine/n2,
 /area/engine/engineering/pvp)
 "qc" = (
 /obj/machinery/airalarm{
@@ -6808,8 +6823,7 @@
 /area/maintenance/pvp)
 "qh" = (
 /obj/machinery/camera/syndicate{
-	c_tag = "Research Director's Office";
-	network = list("SS13","RD")
+	c_tag = "Research Director's Office"
 	},
 /obj/machinery/requests_console{
 	announcementConsole = 1;
@@ -6858,7 +6872,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/open/floor/engine,
+/turf/open/floor/engine/o2,
 /area/engine/engineering/pvp)
 "qm" = (
 /obj/structure/table,
@@ -7013,7 +7027,9 @@
 /obj/structure/cable{
 	icon_state = "1-2"
 	},
-/obj/structure/displaycase/captain,
+/obj/structure/displaycase/captain{
+	req_access = list(151)
+	},
 /obj/machinery/firealarm{
 	dir = 8;
 	pixel_x = -24
@@ -7488,8 +7504,7 @@
 	dir = 4
 	},
 /obj/machinery/camera/syndicate{
-	c_tag = "Research Division";
-	network = list("SS13","RD")
+	c_tag = "Research Division"
 	},
 /turf/open/floor/plasteel/white,
 /area/science/pvp)
@@ -8191,8 +8206,7 @@
 /obj/structure/table/glass,
 /obj/machinery/camera/syndicate{
 	c_tag = "Research and Development";
-	dir = 8;
-	network = list("SS13","RD")
+	dir = 8
 	},
 /obj/structure/window/reinforced,
 /obj/item/storage/box/monkeycubes/syndicate,
@@ -8352,8 +8366,10 @@
 /obj/structure/table,
 /obj/item/stack/sheet/plasteel/twenty,
 /obj/item/stack/cable_coil,
-/obj/item/assembly/flash,
-/obj/item/assembly/flash,
+/obj/item/assembly/flash/handheld,
+/obj/item/assembly/flash/handheld,
+/obj/item/assembly/flash/handheld,
+/obj/item/assembly/flash/handheld,
 /turf/open/floor/plasteel,
 /area/science/robotics/pvp)
 "tF" = (
@@ -8553,8 +8569,7 @@
 	dir = 4;
 	node1_concentration = 0.8;
 	node2_concentration = 0.2;
-	on = 1;
-	
+	on = 1
 	},
 /turf/open/floor/engine,
 /area/engine/engineering/pvp)
@@ -8573,8 +8588,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/camera/syndicate{
 	c_tag = "Brig Cell 1";
-	dir = 4;
-	network = list("SS13","Brig")
+	dir = 4
 	},
 /obj/effect/turf_decal/tile/ship/full/red,
 /turf/open/floor/monotile/dark,
@@ -8594,12 +8608,11 @@
 /area/security/brig/pvp)
 "ud" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/effect/turf_decal/tile/ship/full/red,
 /obj/machinery/camera/syndicate{
 	c_tag = "Brig Cell 2";
-	dir = 4;
-	network = list("SS13","Brig")
+	dir = 4
 	},
-/obj/effect/turf_decal/tile/ship/full/red,
 /turf/open/floor/monotile/dark,
 /area/security/brig/pvp)
 "uf" = (
@@ -8629,16 +8642,15 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/open/floor/engine,
+/turf/open/floor/engine/co2,
 /area/engine/engineering/pvp)
 "uh" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
+/obj/effect/turf_decal/tile/ship/full/red,
 /obj/machinery/camera/syndicate{
 	c_tag = "Brig Cell 3";
-	dir = 4;
-	network = list("SS13","Brig")
+	dir = 4
 	},
-/obj/effect/turf_decal/tile/ship/full/red,
 /turf/open/floor/monotile/dark,
 /area/security/brig/pvp)
 "ui" = (
@@ -8739,7 +8751,7 @@
 	dir = 1
 	},
 /obj/machinery/atmospherics/miner/oxygen,
-/turf/open/floor/engine,
+/turf/open/floor/engine/o2,
 /area/engine/engineering/pvp)
 "ut" = (
 /obj/effect/spawner/structure/window/reinforced,
@@ -10111,6 +10123,8 @@
 /turf/open/floor/plating,
 /area/quartermaster/pvp)
 "xF" = (
+/obj/machinery/ore_silo,
+/obj/item/multitool,
 /turf/open/floor/mineral/plastitanium,
 /area/quartermaster/pvp)
 "xG" = (
@@ -10508,6 +10522,10 @@
 /obj/item/stock_parts/cell,
 /obj/item/stock_parts/cell,
 /obj/item/assembly/prox_sensor,
+/obj/item/paper/fluff{
+	info = "IF YOU MAKE A BORG, BE SURE TO EMAG IT! We're using stolen NT borg tech so it'll have their stupid laws. - Steve";
+	name = "Note from Steve the scientist"
+	},
 /turf/open/floor/plasteel/white,
 /area/science/robotics/pvp)
 "yA" = (
@@ -11312,7 +11330,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/open/floor/engine,
+/turf/open/floor/engine/plasma,
 /area/engine/engineering/pvp)
 "AC" = (
 /obj/structure/rack,
@@ -11439,8 +11457,7 @@
 "AR" = (
 /obj/machinery/camera/syndicate{
 	c_tag = "Xenobiology";
-	dir = 4;
-	network = list("SS13","RD")
+	dir = 4
 	},
 /obj/machinery/computer/camera_advanced/xenobio{
 	dir = 4
@@ -12307,7 +12324,10 @@
 	pixel_x = 26
 	},
 /obj/machinery/atmospherics/pipe/simple/cyan/visible/layer1,
-/obj/machinery/atmospherics/pipe/simple/scrubbers/visible/layer3,
+/obj/machinery/atmospherics/components/trinary/filter/flipped/on/layer3{
+	filter_type = "nucleium";
+	name = "Nucleium Filter"
+	},
 /turf/open/floor/mineral/plastitanium/red,
 /area/engine/engineering/pvp)
 "CY" = (
@@ -12623,8 +12643,7 @@
 /obj/machinery/door/window/eastleft{
 	dir = 8;
 	icon_state = "right";
-	name = "Hydroponics Desk";
-	
+	name = "Hydroponics Desk"
 	},
 /turf/open/floor/plating,
 /area/crew_quarters/cafeteria/pvp)
@@ -12858,8 +12877,7 @@
 /obj/machinery/atmospherics/components/trinary/filter{
 	dir = 8;
 	filter_type = "plasma";
-	on = 1;
-	
+	on = 1
 	},
 /turf/open/floor/engine,
 /area/engine/engineering/pvp)
@@ -13097,8 +13115,8 @@
 "EO" = (
 /obj/structure/disposalpipe/segment,
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
-/obj/machinery/atmospherics/pipe/simple/purple/visible/layer1{
-	dir = 6
+/obj/machinery/atmospherics/pipe/manifold/purple/visible/layer1{
+	dir = 1
 	},
 /turf/open/floor/mineral/plastitanium/red,
 /area/engine/engineering/pvp)
@@ -13163,11 +13181,12 @@
 	icon_state = "1-4"
 	},
 /obj/structure/disposalpipe/segment,
-/obj/machinery/atmospherics/components/binary/pump{
-	dir = 4
-	},
 /obj/machinery/atmospherics/pipe/simple/purple/visible/layer1{
 	dir = 9
+	},
+/obj/machinery/atmospherics/components/binary/pump/on{
+	dir = 4;
+	target_pressure = 500
 	},
 /turf/open/floor/engine,
 /area/engine/engineering/pvp)
@@ -13337,7 +13356,7 @@
 	pixel_y = 2
 	},
 /obj/structure/window/reinforced,
-/turf/open/floor/engine,
+/turf/open/floor/engine/co2,
 /area/engine/engineering/pvp)
 "Fy" = (
 /obj/machinery/atmospherics/components/unary/portables_connector/visible,
@@ -13420,8 +13439,8 @@
 "FK" = (
 /obj/structure/table,
 /obj/machinery/cell_charger,
-/obj/item/organ/brain/positron,
 /obj/item/stock_parts/cell,
+/obj/item/mmi/posibrain,
 /turf/open/floor/plasteel/white,
 /area/science/robotics/pvp)
 "FL" = (
@@ -14473,8 +14492,7 @@
 /area/nsv/weapons/pvp)
 "Iw" = (
 /obj/machinery/camera/syndicate{
-	c_tag = "R&D Server Room";
-	network = list("SS13","RD")
+	c_tag = "R&D Server Room"
 	},
 /obj/machinery/atmospherics/components/unary/thermomachine/freezer{
 	on = 1;
@@ -15117,6 +15135,12 @@
 /obj/effect/spawner/lootdrop/techstorage/AI,
 /turf/open/floor/plating,
 /area/maintenance/pvp)
+"Kd" = (
+/obj/machinery/atmospherics/components/unary/outlet_injector/atmos/atmos_waste{
+	dir = 4
+	},
+/turf/open/floor/plating/airless,
+/area/engine/engineering/pvp)
 "Ke" = (
 /obj/structure/cable{
 	icon_state = "1-2"
@@ -15672,8 +15696,7 @@
 	dir = 4
 	},
 /obj/structure/disposaloutlet{
-	dir = 1;
-	
+	dir = 1
 	},
 /turf/open/floor/plasteel,
 /area/nsv/weapons/pvp)
@@ -15881,6 +15904,10 @@
 	tag = ""
 	},
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
+/obj/machinery/atmospherics/components/unary/portables_connector/visible/layer1{
+	dir = 4;
+	name = "Direct Moderator Input"
+	},
 /turf/open/floor/plasteel/tech/grid,
 /area/engine/engineering/pvp)
 "Mi" = (
@@ -16096,6 +16123,14 @@
 	},
 /obj/item/healthanalyzer,
 /obj/item/healthanalyzer,
+/obj/item/encryptionkey/syndicate,
+/obj/item/encryptionkey/syndicate,
+/obj/item/encryptionkey/syndicate,
+/obj/item/encryptionkey/syndicate,
+/obj/item/encryptionkey/syndicate,
+/obj/item/encryptionkey/syndicate,
+/obj/item/encryptionkey/syndicate,
+/obj/item/encryptionkey/syndicate,
 /turf/open/floor/plasteel/white,
 /area/science/robotics/pvp)
 "MH" = (
@@ -16642,7 +16677,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/open/floor/engine,
+/turf/open/floor/engine/air,
 /area/engine/engineering/pvp)
 "Oc" = (
 /obj/structure/cable{
@@ -17521,6 +17556,16 @@
 /obj/item/poster/random_contraband,
 /turf/open/floor/wood,
 /area/crew_quarters/bar/pvp)
+"Qe" = (
+/obj/effect/spawner/structure/window/reinforced,
+/obj/machinery/door/poddoor/preopen{
+	id = "astraeus_battendownthehatches"
+	},
+/obj/machinery/atmospherics/pipe/simple/scrubbers/visible{
+	dir = 4
+	},
+/turf/open/floor/plating,
+/area/engine/engineering/pvp)
 "Qf" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on{
 	dir = 8
@@ -18546,6 +18591,9 @@
 	dir = 4;
 	pixel_x = -22
 	},
+/obj/machinery/atmospherics/components/unary/portables_connector/visible/layer3{
+	dir = 4
+	},
 /turf/open/floor/plasteel/tech/grid,
 /area/engine/engineering/pvp)
 "Sv" = (
@@ -18749,8 +18797,7 @@
 	},
 /obj/machinery/camera/syndicate{
 	c_tag = "AI Chamber South";
-	dir = 8;
-	network = list("SS13","MiniSat")
+	dir = 8
 	},
 /turf/open/floor/plasteel/dark,
 /area/crew_quarters/heads/captain/pvp/admiral)
@@ -18957,8 +19004,7 @@
 /area/hydroponics/pvp)
 "Tj" = (
 /obj/structure/piano{
-	icon_state = "piano";
-	
+	icon_state = "piano"
 	},
 /turf/open/floor/carpet/red,
 /area/crew_quarters/bar/pvp)
@@ -19183,7 +19229,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/open/floor/engine,
+/turf/open/floor/engine/n2,
 /area/engine/engineering/pvp)
 "TL" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden{
@@ -19305,8 +19351,9 @@
 /turf/open/floor/mineral/plastitanium/red,
 /area/bridge/meeting_room/pvp)
 "TW" = (
-/obj/machinery/atmospherics/components/binary/pump{
-	dir = 1
+/obj/machinery/atmospherics/components/binary/pump/on{
+	dir = 1;
+	target_pressure = 500
 	},
 /turf/open/floor/engine,
 /area/engine/engineering/pvp)
@@ -20105,7 +20152,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/open/floor/engine,
+/turf/open/floor/engine/air,
 /area/engine/engineering/pvp)
 "VI" = (
 /obj/machinery/camera/syndicate{
@@ -20391,8 +20438,7 @@
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
 /obj/machinery/camera/syndicate{
 	c_tag = "Robotics East";
-	dir = 8;
-	network = list("SS13","RD")
+	dir = 8
 	},
 /turf/open/floor/plasteel,
 /area/science/robotics/pvp)
@@ -20480,8 +20526,7 @@
 "WJ" = (
 /obj/machinery/camera/syndicate{
 	c_tag = "Engine South";
-	dir = 1;
-	network = list("SS13","Supermatter")
+	dir = 1
 	},
 /obj/structure/extinguisher_cabinet{
 	pixel_y = -30
@@ -20767,8 +20812,7 @@
 "Xr" = (
 /obj/machinery/camera/syndicate{
 	c_tag = "Supermatter Chamber";
-	dir = 4;
-	network = list("SS13","Supermatter")
+	dir = 4
 	},
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on,
 /turf/open/floor/plasteel/dark,
@@ -20837,7 +20881,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/open/floor/engine,
+/turf/open/floor/engine/plasma,
 /area/engine/engineering/pvp)
 "Xz" = (
 /obj/machinery/atmospherics/pipe/simple/supply/hidden,
@@ -20950,8 +20994,7 @@
 /area/space)
 "XR" = (
 /obj/machinery/camera/syndicate{
-	c_tag = "AI Chamber North";
-	network = list("SS13","MiniSat")
+	c_tag = "AI Chamber North"
 	},
 /obj/structure/rack,
 /obj/effect/spawner/lootdrop/aimodule_harmless,
@@ -21034,7 +21077,7 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
-/turf/open/floor/engine,
+/turf/open/floor/engine/o2,
 /area/engine/engineering/pvp)
 "Ya" = (
 /obj/machinery/computer/mech_bay_power_console{
@@ -21195,7 +21238,7 @@
 	pixel_y = 2
 	},
 /obj/structure/window/reinforced,
-/turf/open/floor/engine,
+/turf/open/floor/engine/n2o,
 /area/engine/engineering/pvp)
 "Yy" = (
 /obj/effect/turf_decal/stripes/line{
@@ -21223,7 +21266,7 @@
 /obj/structure/window/reinforced{
 	dir = 4
 	},
-/turf/open/floor/engine,
+/turf/open/floor/engine/n2o,
 /area/engine/engineering/pvp)
 "YA" = (
 /obj/machinery/atmospherics/components/unary/vent_pump{
@@ -21244,7 +21287,7 @@
 /obj/structure/window/reinforced{
 	dir = 8
 	},
-/turf/open/floor/engine,
+/turf/open/floor/engine/co2,
 /area/engine/engineering/pvp)
 "YB" = (
 /obj/machinery/vending/cigarette,
@@ -21787,8 +21830,7 @@
 /obj/machinery/atmospherics/components/trinary/filter{
 	dir = 8;
 	filter_type = "n2o";
-	on = 1;
-	
+	on = 1
 	},
 /turf/open/floor/engine,
 /area/engine/engineering/pvp)
@@ -21796,8 +21838,7 @@
 /obj/machinery/atmospherics/components/trinary/filter{
 	dir = 8;
 	filter_type = "co2";
-	on = 1;
-	
+	on = 1
 	},
 /turf/open/floor/engine,
 /area/engine/engineering/pvp)
@@ -43858,7 +43899,7 @@ he
 he
 Ze
 Ze
-Ze
+Kd
 Dn
 Ze
 nx
@@ -44115,7 +44156,7 @@ Xq
 Xq
 xd
 xd
-SX
+Qe
 Iq
 SX
 kI
@@ -44372,7 +44413,7 @@ ZS
 ZS
 lF
 Xm
-mz
+eO
 DY
 qX
 pO
