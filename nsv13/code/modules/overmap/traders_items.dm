@@ -92,6 +92,19 @@
 	for(var/X in preset_contents)
 		new X(src)
 
+/obj/structure/overmap/base_assault
+	name = "Hijacked Plasma Research Station"
+	icon = 'nsv13/icons/overmap/neutralstation.dmi'
+	icon_state = "combust"
+	damage_states = FALSE //Not yet implemented
+	faction = "nanotrasen"//Nanotrasen ships should be capturing or formally detonating the station, not just shooting at it
+	mass = MASS_TITAN
+	brakes = TRUE
+	obj_integrity = 3000 //Really robust, but not invincible.
+	max_integrity = 3000
+	bound_width = 224
+	bound_height = 224
+
 /datum/trader_item/railgun
 	name = "Railgun Kit"
 	desc = "Everything you need to build a ship to ship railgun."

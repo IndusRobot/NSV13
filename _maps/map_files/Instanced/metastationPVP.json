@@ -1,0 +1,13 @@
+{
+	"map_name": "NSV MetaStation",
+    "map_path": "map_files/Instanced/map_files",
+    "map_file": ["MetaStation.dmm"],
+	"traits": [
+		{
+			"Linkage": "Self",
+			"Syndicate Ship": 1,
+			"Boardable Ship": 1
+		},
+	],
+	"ship_type": "/obj/structure/overmap/base_assault"
+}
