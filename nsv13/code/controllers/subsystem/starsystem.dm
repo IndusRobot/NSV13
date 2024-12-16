@@ -6,6 +6,7 @@ SUBSYSTEM_DEF(star_system)
 
 	var/last_combat_enter = 0 //Last time an AI controlled ship attacked the players
 	var/list/systems = list()
+	var/list/system_index_by_name = list()
 	var/list/traders = list()
 	var/bounty_pool = 0 //Bounties pool to be delivered for destroying syndicate ships
 	var/list/enemy_types = list()
@@ -17,6 +18,7 @@ SUBSYSTEM_DEF(star_system)
 	var/list/all_missions = list()
 	var/time_limit = FALSE //Do we want to end the round after a specific time? Mostly used for galconquest.
 	var/datum/star_system/return_system //Which system should we jump to at the end of the round?
+	var/list/starsystem_phenomena = list()
 
 	var/enable_npc_combat = TRUE	//If you are running an event and don't want fleets to shoot eachother, set this to false.
 	var/next_combat_cycle = 0
@@ -69,6 +71,7 @@ SUBSYSTEM_DEF(star_system)
 		if(S.sector != SECTOR_NEUTRAL)
 			continue
 		neutral_zone_systems += S
+	roundstart_starsystem_phenomena()
 
 /datum/controller/subsystem/star_system/Shutdown()
 	if(CONFIG_GET(flag/starmap_persistence_enabled))
@@ -409,6 +412,62 @@ Returns a faction datum by its name (case insensitive!)
 		return FALSE
 	return (world.time - info["from_time"])/(info["to_time"] - info["from_time"])
 
+/datum/controller/subsystem/star_system/proc/roundstart_starsystem_phenomena()
+	for ( var/datum/star_system/system in systems )
+		// Creating an index here to quickly access later, instead of another for loop
+		system_index_by_name[ system.name ] = system
+
+		// Start making weather
+		if ( !prob( 25 ) )
+			continue
+
+		add_new_weather( system )
+
+	addtimer(CALLBACK(src, PROC_REF(transfer_starsystem_phenomena)), 2 MINUTES)
+
+/datum/controller/subsystem/star_system/proc/transfer_starsystem_phenomena()
+	message_admins( "transfer_starsystem_phenomena" )
+	// Chance to kill and replace one weather effect every interval
+	if ( prob( 5 ) )
+		var/datum/starsystem_phenomena/chopped = pick( starsystem_phenomena )
+		chopped.system.starsystem_phenomena -= chopped
+		starsystem_phenomena -= chopped
+		qdel( chopped )
+
+		var/new_system = pick( systems )
+		add_new_weather( new_system )
+
+	// Iterate through the weather list and make changes
+	for ( var/datum/starsystem_phenomena/weather in starsystem_phenomena )
+		try // Avoiding errors killing the timer interval
+			if ( !prob( weather.transfer_chance ) )
+				continue
+
+			var/datum/star_system/adjacent_system = system_index_by_name[ pick( weather.system.adjacency_list ) ]
+			if ( !adjacent_system )
+				continue
+
+			adjacent_system.starsystem_phenomena += weather
+			weather.system.starsystem_phenomena -= weather
+			weather.system = adjacent_system
+
+			// On transfer to the system if there's a player ship inside, run the event
+			var/obj/structure/overmap/main_ship = SSstar_system.find_main_overmap()
+			if ( weather.system == main_ship.current_system )
+				run_starsystem_phenomena()
+		catch
+
+	addtimer(CALLBACK(src, PROC_REF(transfer_starsystem_phenomena)), 2 MINUTES)
+
+/datum/controller/subsystem/star_system/proc/add_new_weather(var/datum/star_system/system)
+	var/datum/starsystem_phenomena/weather = new
+	starsystem_phenomena += weather
+	weather.system = system
+	system.starsystem_phenomena += weather
+
+/datum/controller/subsystem/star_system/proc/run_starsystem_phenomena()
+	message_admins( "proc/run_starsystem_phenomena" )
+
 /datum/controller/subsystem/star_system/proc/dolos_visited(datum/star_system/source, obj/structure/overmap/entering)
 	SIGNAL_HANDLER
 	if(entering.ai_controlled)
@@ -476,6 +535,7 @@ Returns a faction datum by its name (case insensitive!)
 	var/list/audio_cues = null //if you want music to queue on system entry. Format: list of youtube or media URLS.
 	var/already_announced_combat = FALSE
 	var/startup_proc = null
+	var/list/starsystem_phenomena = list()
 
 /datum/star_system/proc/dist(datum/star_system/other)
 	var/dx = other.x - x

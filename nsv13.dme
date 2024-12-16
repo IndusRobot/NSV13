@@ -3744,6 +3744,7 @@
 #include "nsv13\code\datums\looping_sounds\_looping_sound.dm"
 #include "nsv13\code\datums\looping_sounds\machinery_sounds.dm"
 #include "nsv13\code\datums\mood_events\nsv_events.dm"
+#include "nsv13\code\datums\starsystem_phenomena\starsystem_phenomena.dm"
 #include "nsv13\code\datums\traits\negative.dm"
 #include "nsv13\code\datums\traits\neutral.dm"
 #include "nsv13\code\game\atoms_movable.dm"
