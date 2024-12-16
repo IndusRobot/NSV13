@@ -101,6 +101,8 @@ export const Astrometrics = (props, context) => {
                 <br />
                 System type: {data.system_type ? data.system_type : "Unknown"}
                 <br />
+                Last scanned: {data.last_scanned ? data.last_scanned : "not scanned"}
+                <br />
               </Section>
               <Section title="Telemetry info:">
                 {Object.keys(data.anomalies).map(key => {
@@ -146,6 +148,13 @@ export const Astrometrics = (props, context) => {
                     );
                   }
                 })}
+                {data.starsystem_phenomena ? Object.keys(data.starsystem_phenomena).map(key => {
+                  let value = data.starsystem_phenomena[key];
+                  return (
+                    <Section title={value} key={key}>&nbsp;
+                    </Section>
+                  );
+                }) : null}
               </Section>
             </Fragment>
           )}

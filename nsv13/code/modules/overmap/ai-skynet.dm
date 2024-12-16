@@ -1670,6 +1670,7 @@ Seek a ship thich we'll station ourselves around
 	var/datum/ai_goal/current_goal = null
 	var/obj/structure/overmap/squad_lead = null
 	var/obj/structure/overmap/last_overmap = null
+	var/obj/machinery/computer/ship/navigation/astrometrics/astrometrics_console = null // Receive incoming weather alerts without using more timers
 	var/switchsound_cooldown = 0
 
 /obj/structure/overmap/proc/ai_fire(atom/target)

@@ -18,7 +18,9 @@ SUBSYSTEM_DEF(star_system)
 	var/list/all_missions = list()
 	var/time_limit = FALSE //Do we want to end the round after a specific time? Mostly used for galconquest.
 	var/datum/star_system/return_system //Which system should we jump to at the end of the round?
-	var/list/starsystem_phenomena = list()
+	var/list/starsystem_phenomena = list() // A list all initalized weather in the round
+	var/interval_weather_transfer = 3 MINUTES // Time until weather moves around
+	var/interval_weather_travel = 1 MINUTES // Travel time until weather starts, gives players some reaction time, avoids getting blindsided by incoming weather
 
 	var/enable_npc_combat = TRUE	//If you are running an event and don't want fleets to shoot eachother, set this to false.
 	var/next_combat_cycle = 0
@@ -423,7 +425,7 @@ Returns a faction datum by its name (case insensitive!)
 
 		add_new_weather( system )
 
-	addtimer(CALLBACK(src, PROC_REF(transfer_starsystem_phenomena)), 2 MINUTES)
+	addtimer(CALLBACK(src, PROC_REF(transfer_starsystem_phenomena)), interval_weather_transfer)
 
 /datum/controller/subsystem/star_system/proc/transfer_starsystem_phenomena()
 	message_admins( "transfer_starsystem_phenomena" )
@@ -437,9 +439,11 @@ Returns a faction datum by its name (case insensitive!)
 		var/new_system = pick( systems )
 		add_new_weather( new_system )
 
+	var/obj/structure/overmap/OM = SSstar_system.find_main_overmap()
+
 	// Iterate through the weather list and make changes
-	for ( var/datum/starsystem_phenomena/weather in starsystem_phenomena )
-		try // Avoiding errors killing the timer interval
+	try
+		for ( var/datum/starsystem_phenomena/weather in starsystem_phenomena )
 			if ( !prob( weather.transfer_chance ) )
 				continue
 
@@ -447,26 +451,55 @@ Returns a faction datum by its name (case insensitive!)
 			if ( !adjacent_system )
 				continue
 
-			adjacent_system.starsystem_phenomena += weather
+			end_starsystem_phenomena( weather.system )
+
 			weather.system.starsystem_phenomena -= weather
+			adjacent_system.starsystem_phenomena += weather
 			weather.system = adjacent_system
+			weather.in_transit = TRUE
+			// Send a notification to player astrometrics
+			if ( weather.system == OM.current_system )
+				OM.astrometrics_console?.weather_alert( weather )
+			addtimer(CALLBACK(src, PROC_REF(finish_weather_transfer)), interval_weather_travel) // shared system timer
+	catch
+		// Avoiding errors killing the timer interval
+		// todo log errors
 
-			// On transfer to the system if there's a player ship inside, run the event
-			var/obj/structure/overmap/main_ship = SSstar_system.find_main_overmap()
-			if ( weather.system == main_ship.current_system )
-				run_starsystem_phenomena()
-		catch
+	addtimer(CALLBACK(src, PROC_REF(transfer_starsystem_phenomena)), interval_weather_transfer)
 
-	addtimer(CALLBACK(src, PROC_REF(transfer_starsystem_phenomena)), 2 MINUTES)
+/datum/controller/subsystem/star_system/proc/finish_weather_transfer()
+	for ( var/datum/starsystem_phenomena/weather in starsystem_phenomena )
+		weather.in_transit = FALSE
+
+		// On transfer to the system if there's are player ships inside, run the event
+		// Weather is run on an individual basis here in the situation that a player ship is already facing weather A when weather B arrives, avoids running weather twice
+		for ( var/obj/structure/overmap/ship in weather.system.system_contents )
+			if ( ship.reserved_z )
+				weather.trigger_event( ship )
 
 /datum/controller/subsystem/star_system/proc/add_new_weather(var/datum/star_system/system)
 	var/datum/starsystem_phenomena/weather = new
+	weather.in_transit = TRUE
 	starsystem_phenomena += weather
 	weather.system = system
 	system.starsystem_phenomena += weather
 
-/datum/controller/subsystem/star_system/proc/run_starsystem_phenomena()
+/datum/controller/subsystem/star_system/proc/run_starsystem_phenomena( var/datum/star_system/S, var/obj/structure/overmap/ship )
+	// Given a star system containing weather and player ships, runs all the events on ships
+	// If a ship is provided only they will be targeted (entering a system)
+
 	message_admins( "proc/run_starsystem_phenomena" )
+	for ( var/datum/starsystem_phenomena/weather in S.starsystem_phenomena )
+		weather.trigger_event( ship )
+
+/datum/controller/subsystem/star_system/proc/end_starsystem_phenomena( var/datum/star_system/S, var/obj/structure/overmap/ship )
+	// Cancel weather effects, if the weather can be cancelled
+	// If a ship is provided only they will be targeted (leaving a system)
+
+	message_admins( "proc/end_starsystem_phenomena" )
+	for ( var/datum/starsystem_phenomena/weather in S.starsystem_phenomena )
+		weather.end_event( ship )
+
 
 /datum/controller/subsystem/star_system/proc/dolos_visited(datum/star_system/source, obj/structure/overmap/entering)
 	SIGNAL_HANDLER
@@ -535,7 +568,7 @@ Returns a faction datum by its name (case insensitive!)
 	var/list/audio_cues = null //if you want music to queue on system entry. Format: list of youtube or media URLS.
 	var/already_announced_combat = FALSE
 	var/startup_proc = null
-	var/list/starsystem_phenomena = list()
+	var/list/starsystem_phenomena = list() // A list of datums, systems may have more than one weather when handled
 
 /datum/star_system/proc/dist(datum/star_system/other)
 	var/dx = other.x - x

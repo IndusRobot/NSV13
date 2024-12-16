@@ -54,6 +54,7 @@
 			SSticker.mode.check_finished()
 			SSticker.news_report = SHIP_VICTORY
 			SSblackbox.record_feedback("text", "nsv_endings", 1, "succeeded")
+	SSstar_system.run_starsystem_phenomena( OM.current_system, OM )
 	if(!length(audio_cues))
 		return FALSE
 	//If we have an audio cue, ensure it doesn't overlap with a fleet's one...
@@ -236,6 +237,7 @@
 
 	relay(ftl_drive.ftl_loop, "<span class='warning'>You feel the ship lurch forward</span>", loop=TRUE, channel = CHANNEL_SHIP_ALERT)
 	var/datum/star_system/curr = SSstar_system.ships[src]["current_system"]
+	SSstar_system.end_starsystem_phenomena( curr, src )
 	SEND_SIGNAL(src, COMSIG_SHIP_DEPARTED) // Let missions know we have left the system
 	curr.remove_ship(src)
 	var/drive_speed = ftl_drive.get_jump_speed()

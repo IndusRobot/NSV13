@@ -23,6 +23,7 @@ you build.
 	var/obj/item/radio/radio //For engineering alerts.
 	var/radio_key = /obj/item/encryptionkey/headset_sci
 	var/channel = "Science"
+	var/all_scanned_star_data = list() // A starsystem data set stored locally on the console. Outdated info gets rescanned
 
 /obj/machinery/computer/ship/navigation/astrometrics/Initialize(mapload)
 	. = ..()
@@ -31,6 +32,8 @@ you build.
 	radio.listening = 0
 	radio.recalculateChannels()
 	linked_techweb = SSresearch.science_tech
+	var/obj/structure/overmap/OM = get_overmap()
+	OM.astrometrics_console = src
 
 /obj/machinery/computer/ship/navigation/astrometrics/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
@@ -69,6 +72,13 @@ Clean override of the navigation computer to provide scan functionality.
 			data["system_type"] = syst ? syst[ "label" ] : "ERROR"	//the list /should/ always be initialized when players get to press the button, but alas never trust it.
 		else
 			data["system_type"] = "Unknown (not scanned)"
+		var/scanned_star_data = all_scanned_star_data[ selected_system.name ]
+		if ( scanned_star_data )
+			data["starsystem_phenomena"] = scanned_star_data[ "starsystem_phenomena" ]
+			data["last_scanned"] = scanned_star_data[ "last_scanned" ]
+		else
+			data["starsystem_phenomena"] = null
+			data["last_scanned"] = null
 
 	data["can_scan"] = is_in_range(current_system, selected_system)
 	data["can_cancel"] = (scan_target) ? TRUE : FALSE
@@ -142,6 +152,15 @@ Clean override of the navigation computer to provide scan functionality.
 			OA.research_points -= reward
 			linked_techweb.add_point_type(TECHWEB_POINT_TYPE_DISCOVERY, reward)
 		OA.scanned = TRUE
+	// Get weather and store a copy of the data locally. Outdated data gets rescanned
+	all_scanned_star_data[ scan_target.name ] = list(
+		"last_scanned" = world.time,
+		"starsystem_phenomena" = list() // A list of plain names
+	)
+	for ( var/datum/starsystem_phenomena/weather in scan_target.starsystem_phenomena )
+		var/named = weather.name
+		if ( weather.in_transit ) named += " (Incoming)"
+		all_scanned_star_data[ scan_target.name ][ "starsystem_phenomena" ] += named
 	scan_target = null
 	scan_progress = 0
 
@@ -149,3 +168,7 @@ Clean override of the navigation computer to provide scan functionality.
 /obj/machinery/computer/ship/navigation/astrometrics/Destroy()
 	QDEL_NULL(radio)
 	return ..()
+
+/obj/machinery/computer/ship/navigation/astrometrics/proc/weather_alert( var/datum/starsystem_phenomena/weather )
+	radio.talk_into(src, "ALERT: " + weather.name + " detected in transit to current system!", channel)
+	playsound(src, 'nsv13/sound/effects/computer/alarm_3.ogg', 100, FALSE)
