@@ -429,6 +429,8 @@ Returns a faction datum by its name (case insensitive!)
 
 /datum/controller/subsystem/star_system/proc/transfer_starsystem_phenomena()
 	message_admins( "transfer_starsystem_phenomena" )
+	addtimer(CALLBACK(src, PROC_REF(transfer_starsystem_phenomena)), interval_weather_transfer) // start the neurotoxin immediately
+
 	// Chance to kill and replace one weather effect every interval
 	if ( prob( 5 ) )
 		var/datum/starsystem_phenomena/chopped = pick( starsystem_phenomena )
@@ -442,30 +444,25 @@ Returns a faction datum by its name (case insensitive!)
 	var/obj/structure/overmap/OM = SSstar_system.find_main_overmap()
 
 	// Iterate through the weather list and make changes
-	try
-		for ( var/datum/starsystem_phenomena/weather in starsystem_phenomena )
-			if ( !prob( weather.transfer_chance ) )
-				continue
+	for ( var/datum/starsystem_phenomena/weather in starsystem_phenomena )
+		if ( !prob( weather.transfer_chance ) )
+			continue
 
-			var/datum/star_system/adjacent_system = system_index_by_name[ pick( weather.system.adjacency_list ) ]
-			if ( !adjacent_system )
-				continue
+		var/datum/star_system/adjacent_system = system_index_by_name[ pick( weather.system.adjacency_list ) ]
+		if ( !adjacent_system )
+			continue
 
-			end_starsystem_phenomena( weather.system )
+		end_starsystem_phenomena( weather.system )
 
-			weather.system.starsystem_phenomena -= weather
-			adjacent_system.starsystem_phenomena += weather
-			weather.system = adjacent_system
-			weather.in_transit = TRUE
-			// Send a notification to player astrometrics
-			if ( weather.system == OM.current_system )
-				OM.astrometrics_console?.weather_alert( weather )
-			addtimer(CALLBACK(src, PROC_REF(finish_weather_transfer)), interval_weather_travel) // shared system timer
-	catch
-		// Avoiding errors killing the timer interval
-		// todo log errors
+		weather.system.starsystem_phenomena -= weather
+		adjacent_system.starsystem_phenomena += weather
+		weather.system = adjacent_system
+		weather.in_transit = TRUE
+		// Send a notification to player astrometrics
+		if ( weather.system == OM.current_system )
+			OM.astrometrics_console?.weather_alert( weather )
+		addtimer(CALLBACK(src, PROC_REF(finish_weather_transfer)), interval_weather_travel) // shared system timer
 
-	addtimer(CALLBACK(src, PROC_REF(transfer_starsystem_phenomena)), interval_weather_transfer)
 
 /datum/controller/subsystem/star_system/proc/finish_weather_transfer()
 	for ( var/datum/starsystem_phenomena/weather in starsystem_phenomena )
